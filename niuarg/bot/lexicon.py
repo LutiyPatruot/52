@@ -105,5 +105,7 @@ class Lexicon:
             data='from_amount_to_category'
         )
 
+        self.fixed_transaction = "Дата: {date}\nТип: {type}\nКатегория: {category}\nСумма: {amount}"
+
     
 lexicon = Lexicon()

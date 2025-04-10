@@ -26,6 +26,11 @@ def can_set_amount_transaction(chat_id):
         return True
     else:
         return False
+    
+def get_transaction_object(chat_id):
+    data = transactions[chat_id]
+    data["chat_id"] = chat_id
+    return data
 
 def get_template_transaction(type_ = None, category = None, amount = None):
     """"
