@@ -50,4 +50,34 @@ for d in data:
         to_pie[type_][category] = 0
         to_pie[type_][category] += amount
         to_pie[type_]["sum"] += amount
-print(to_pie)
+
+expeces_titles = []
+expeces_values = []
+
+incomes_titles = []
+incomes_values = []
+
+for e in expeces_tmp_titles:
+    if e in to_pie ("expence"):
+        value = to_pie["expence"][e] / to_pie["expence"]["sum"] * 100
+        expeces_titles.append(e)
+        expeces_values.append(value)
+
+for i in incomes_tmp_titles:
+    if i in to_pie ("incomes"):
+        value = to_pie["incomes"][i] / to_pie["incomes"]["sum"] * 100
+        incomes_titles.append(i)
+        incomes_values.append(value)
+
+print(incomes_titles)
+print(incomes_values,sum (incomes_values))
+
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 5))
+
+ax1.pie(incomes_values, labels=incomes_titles, autopct="%1.1f%%")
+ax1.set_title("Диограмма доходов")
+ax2.pie(incomes_values, labels=expeces_titles, autopct="%1.1f%%")
+ax2.set_title("Диограмма расходов")
+
+fig.suptitle("Доходы и Расходы в категориях")
+plt.show()
