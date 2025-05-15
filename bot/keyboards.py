@@ -112,8 +112,8 @@ def get_expence_categoriers_kb():
         callback_data=lexicon.attractions_expence.data
     )
     button6 = types.InlineKeyboardButton(
-        text=lexicon.clothes_expence.text,
-        callback_data=lexicon.clothes_expence.data
+        text=lexicon.сlothes_expence.text,
+        callback_data=lexicon.сlothes_expence.data
     )
     button7 = types.InlineKeyboardButton(
         text=lexicon.another_expence.text,

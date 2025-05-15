@@ -1,64 +1,115 @@
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from service.getter_categories import attrs_lexicon
+from io import BytesIO
 
-def pie_chat(data):
-    expeces  = []
+def trend_chart(data):
+    plt.cla()
+    plt.clf()
+    plt.close("all")
+
+    aggregates = {}
+    for d in data:
+        formatted_date = d["date"].strftime("%m.%Y")
+        type_ = d["type"]
+        amount = d["amount"]
+        if formatted_date not in aggregates:
+            aggregates[formatted_date] = {"Доход":0,"Расход":0,}
+        aggregates[formatted_date][type_] += amount
+
+
+    pre_data = []
+    for d in aggregates:
+        pre_data.append((d, aggregates[d]["Доход"], aggregates[d]["Расход"]))
+    
+
+    months = []
+    incomes = []
+    expences = []
+    for d in pre_data:
+        months.append(d[0])
+        incomes.append(d[1])
+        expences.append(d[2])
+    print(months)
+    print(incomes)
+    print(expences)
+
+    plt.plot(months, incomes, label="Доходы")
+    plt.plot(months, expences, label="Расходы")
+    plt.grid()
+    buf= BytesIO()
+    plt.savefig(buf, format="png")
+    buf.seek(0)
+    return buf
+
+def pie_chart(data):
+    plt.cla()
+    plt.clf()
+    plt.close("all")
+
+    expences = []
     incomes = []
     for obj in attrs_lexicon:
-        if obj [0].endswith('expences'):
-            expeces.append(obj)
-        elif obj[0].endswith('incomes'):
+        if obj[0].endswith('expence'):
+            expences.append(obj)
+        elif obj[0].endswith('income'):
             incomes.append(obj)
 
-    expeces_tmp_titles = []
+    expences_tmp_titles =[]
     incomes_tmp_titles = []
-    for e in expeces:
-        expeces_tmp_titles.append(e[1].text)
+    for e in expences:
+        expences_tmp_titles.append(e[1].text)
     for i in incomes:
-        incomes_tmp_titles.append(e[1].text)
+        incomes_tmp_titles.append(i[1].text)
 
-    to_pie = {"income": {"sum": 0}, "expence": {"sum": 0}}
+    
+
+    to_pie = {"income": {"sum":0},"expence": {"sum":0}}
     for d in data:
-        category = d["category"]
-        amount = d["amount"]
+        category = d['category']
+        amount = d['amount']
+        
 
-        if d["type"] == "Доход":
-            type_="income"
-        elif d["type"] == "Расход":
-            type_= "expence"
+        if d['type'] == 'Доход':
+            type_ = 'income'
+        elif d['type'] == 'Расход':
+            type_ ='expence'
 
         if category not in to_pie[type_]:
             to_pie[type_][category] = 0
-            to_pie[type_][category] += amount
-            to_pie[type_]["sum"] += amount
+        to_pie[type_][category] += amount
+        to_pie[type_]["sum"] += amount
 
-    expeces_titles = []
-    expeces_values = []
+    expences_titles = []
+    expences_values = []
 
     incomes_titles = []
     incomes_values = []
 
-    for e in expeces_tmp_titles:
-        if e in to_pie ("expence"):
+    for e in expences_tmp_titles:
+        if e in to_pie["expence"]:
             value = to_pie["expence"][e] / to_pie["expence"]["sum"] * 100
-            expeces_titles.append(e)
-            expeces_values.append(value)
+            expences_titles.append(e)
+            expences_values.append(value)
 
     for i in incomes_tmp_titles:
-        if i in to_pie ("incomes"):
-            value = to_pie["incomes"][i] / to_pie["incomes"]["sum"] * 100
+        if i in to_pie["income"]:
+            value = to_pie["income"][i] / to_pie["income"]["sum"] * 100
             incomes_titles.append(i)
             incomes_values.append(value)
 
-    print(incomes_titles)
-    print(incomes_values,sum (incomes_values))
+    fig, (ax1,ax2) = plt.subplots(1,2, figsize=(10,5))
 
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 5))
+    ax1.pie(incomes_values, labels=incomes_titles, autopct='%1.1f%%')
+    ax1.set_title('Диаграмма доходов')
+    ax2.pie(expences_values, labels=expences_titles, autopct='%1.1f%%')
+    ax2.set_title('Диаграмма расходов')
 
-    ax1.pie(incomes_values, labels=incomes_titles, autopct="%1.1f%%")
-    ax1.set_title("Диограмма доходов")
-    ax2.pie(incomes_values, labels=expeces_titles, autopct="%1.1f%%")
-    ax2.set_title("Диограмма расходов")
+    fig.suptitle('Доходы и расходы в категориях')
+    buf = BytesIO()
+    fig.savefig(buf, format="png")
+    print(fig)
+    buf.seek(0)
 
-    fig.suptitle("Доходы и Расходы в категориях")
-    plt.show()
+    return buf

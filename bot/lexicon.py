@@ -2,7 +2,8 @@ class CallbackLexicon:
     def __init__(self, text, data):
         self.text = text
         self.data = data
-
+        
+        
 class Lexicon:    
     def __init__(self):
         self.start = "Это бот для учета финансов. Ты можешь вести журнал доходов и расходов," \
@@ -32,80 +33,78 @@ class Lexicon:
             text="Расход",
             data="expence_transaction"
         )
-
+        
         self.pocket_income = CallbackLexicon(
-            text='Карманные',
-            data='salary_income'
+            text="Карманные",
+            data="pocket_income"
         )
-
+        
         self.salary_income = CallbackLexicon(
-            text='Зарплата',
-            data='salary_income'
+            text="Зарплата",
+            data="salary_income"
         )
-
+        
         self.gift_income = CallbackLexicon(
-            text='Подарок',
-            data='gift_income'
-
+            text="Подарок",
+            data="gift_income"
         )
 
         self.another_income = CallbackLexicon(
-            text='Другое',
-            data='another_income'
+            text="Другое",
+            data="gift_income"
         )
-
+        
         self.philanthropy_expence = CallbackLexicon(
-            text='Благотворительность',
-            data='philanthropy_expence'
+            text="Благотворительность",
+            data="philanthropy_expence"
         )
-
+        
         self.food_expence = CallbackLexicon(
-            text='Питание',
-            data='food_income'
+            text="Питание",
+            data="food_expence"
         )
-
+        
         self.transport_expence = CallbackLexicon(
-            text='Транспорт',
-            data='transport_income'
+            text="Транспорт",
+            data="transport_expence"
         )
-
+        
         self.attractions_expence = CallbackLexicon(
-            text='Развлечения',
-            data='attractions_income'
+            text="Развлечения",
+            data="attractions_expence"
         )
-
-        self.clothes_expence = CallbackLexicon(
-            text='Одежда',
-            data='clothes_income'
+        
+        self.сlothes_expence = CallbackLexicon(
+            text="Одежда",
+            data="сlothes_expence"
         )
-
+        
         self.gift_expence = CallbackLexicon(
-            text='Подарок',
-            data='gift_expence'
+            text="Подарки",
+            data="gift_expence"
         )
-
+        
         self.another_expence = CallbackLexicon(
-            text='Другое',
-            data='another_expence'
+            text="Подарки",
+            data="another_expence"
         )
-
+        
         self.from_transaction_categorie = CallbackLexicon(
-            text='вода 19,5 литров',
-            data='from_transaction_categorie'
+            text="Назад",
+            data="from_transaction_categorie"
         )
-
-
+        
         self.from_select_transaction_type = CallbackLexicon(
-            text='venom',
-            data='from_select_transaction_type'
+            text="Назад",
+            data="from_select_transaction_type"
         )
-
+        
         self.from_amount_to_category = CallbackLexicon(
-            text='venom',
-            data='from_amount_to_category'
+            text="Назад",
+            data="from_amount_to_category"
         )
-
-        self.fixed_transaction = "Дата: {date}\nТип: {type}\nКатегория: {category}\nСумма: {amount}"
-
+        
+        self.fixed_transaction = "Дата: {date}\nТип: {type}\nКатегория: {category}\nСумма: {amount} р."
+        
     
 lexicon = Lexicon()

@@ -4,7 +4,7 @@ from keyboards import get_expence_categoriers_kb, get_main_menu_kb, get_transact
 from telebot import TeleBot
 from service.transaction import create_transaction,set_type_transaction,set_category_transaction,can_set_amount_transaction,set_amount_transaction,get_category, get_transaction_object 
 
-from service.datadase import write_database
+from service.database import write_database
 from service.message import msgs_to_delete
 from service.getter_categories import callback_categories
 
@@ -17,7 +17,7 @@ def register_move_handlers(bot: TeleBot):
         chat_id = callback.message.chat.id
         bot.edit_message_text(
             chat_id=chat_id,
-            text="123", 
+            text="Меню", 
             message_id=callback.message.message_id,
             reply_markup=get_transaction_type_kb()
         )
@@ -29,9 +29,9 @@ def register_move_handlers(bot: TeleBot):
         chat_id = callback.message.chat.id
         bot.edit_message_text(
             chat_id=chat_id,
-            text='123',
+            text='Меню',
             message_id=callback.message.message_id,
-            reply_markup=get_expence_categoriers_kb()
+            reply_markup=get_income_categories_kb()
         )
         set_type_transaction(chat_id, lexicon.select_income.text)
 
@@ -42,7 +42,7 @@ def register_move_handlers(bot: TeleBot):
         chat_id = callback.message.chat.id
         bot.edit_message_text(
             chat_id=chat_id,
-            text='123',
+            text='Меню',
             message_id=callback.message.message_id,
             reply_markup=get_expence_categoriers_kb()
         )
@@ -54,7 +54,7 @@ def register_move_handlers(bot: TeleBot):
     def from_select_transaction_type(callback):
         bot.edit_message_text(
             chat_id=callback.message.chat.id,
-            message_id=callback.message.chat.id,
+            message_id=callback.message.message_id,
             text=lexicon.start,
             reply_markup=get_main_menu_kb() 
         )
@@ -62,6 +62,7 @@ def register_move_handlers(bot: TeleBot):
     @bot.callback_query_handler(
         func=lambda call: call.data in callback_categories
         )
+    
         
     def from_category_to_amout(callback):
         set_category_transaction(callback.message.chat.id, callback_categories[callback.data])
@@ -69,21 +70,17 @@ def register_move_handlers(bot: TeleBot):
             chat_id=callback.message.chat.id,
             message_id=callback.message.message_id,
             text='Напишите сумму',
-            reply_markup=get_back_to_category_kb()
+            reply_markup=get_main_menu_kb()
         )
         msgs_to_delete[callback.message.chat.id] = callback.message.message_id
 
     @bot.message_handler(
         func=lambda msg: can_set_amount_transaction(msg.chat.id) and msg.text.isdigit()
     )
-    def fron_amount_to_main_menu(message):
+    def from_amount_to_main_menu(message):
         amount = int(message.text)
         chat_id = message.chat.id
         set_amount_transaction(chat_id, amount)
-        #
-        #
-        #
-        #
         data = get_transaction_object(chat_id)
         write_database(data)
 
@@ -129,3 +126,10 @@ def register_move_handlers(bot: TeleBot):
             text='123',
             reply_markup=kb
         )
+
+    @bot.callback_query_handler(
+        func=lambda call: call.data == lexicon.from_transaction_categorie.data
+    )
+    def from_transaction_categorie(callback):
+        to_fix_transaction(callback)
+
